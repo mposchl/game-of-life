@@ -4,6 +4,7 @@ namespace App\Command;
 use App\DataProvider\Adapter\XmlAdapter;
 use App\DataProvider\DataProvider;
 use App\DataProvider\Transformer\XmlTransformer;
+use App\DataProvider\XmlWriter\XmlWriter;
 use App\Game\Game;
 use App\World\Court;
 use App\World\Helper\BoundariesHelper;
@@ -44,9 +45,9 @@ class GameCommand extends Command {
 		// play the game
 		$tenementPlus = $game->run();
 
-		var_dump($tenementPlus);die;
-
 		// export state to xml
-		//todo
+		$outputFile = $input->getOption('output');
+		$writer = new XmlWriter($outputFile);
+		$writer->write($tenementPlus);
 	}
 }
