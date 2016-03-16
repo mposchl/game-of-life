@@ -5,6 +5,8 @@ use App\DataProvider\Adapter\XmlAdapter;
 use App\DataProvider\DataProvider;
 use App\DataProvider\Transformer\XmlTransformer;
 use App\Game\Game;
+use App\World\Court;
+use App\World\Helper\BoundariesHelper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,16 +27,26 @@ class GameCommand extends Command {
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output) {
+		// load xml data
 		$inputFile = $input->getOption('input');
 		$dataProvider = new DataProvider(new XmlAdapter($inputFile));
 		$xmlData = $dataProvider->getData();
 
+		// transform xml data to game data
 		$transformer = new XmlTransformer($xmlData);
-		$world = $transformer->createWorld();
+		$tenement = $transformer->createTenement();
 
-		$game = new Game($world);
-		$newWorld = $game->run();
+		// prepare all entities for gameplay
+		$helper = new BoundariesHelper($tenement->size);
+		$court = new Court($helper);
+		$game = new Game($tenement, $court, $helper);
 
-		var_dump($newWorld);
+		// play the game
+		$tenementPlus = $game->run();
+
+		var_dump($tenementPlus);die;
+
+		// export state to xml
+		//todo
 	}
 }

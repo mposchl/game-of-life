@@ -2,8 +2,8 @@
 namespace App\DataProvider\Transformer;
 
 use App\DataProvider\Transformer\Exception\XmlElementMissingException;
-use App\World\Organism;
-use App\World\World;
+use App\World\Body;
+use App\World\Tenement;
 
 /**
  * @author Martin Pöschl <martin.poschl@gmail.com>
@@ -23,36 +23,34 @@ class XmlTransformer {
 	}
 
 	/**
-	 * @return World
+	 * @return Tenement
 	 * @throws XmlElementMissingException
 	 */
-	public function createWorld() {
+	public function createTenement() {
 		$size = (int)$this->getElementByPath('world.cells');
 		$iterations = (int)$this->getElementByPath('world.iterations');
-		$species = (int)$this->getElementByPath('world.species');
+		$races = (int)$this->getElementByPath('world.species');
 
-		$state = new World($size, $iterations, $species);
-		$state->setOrganisms($this->getOrganisms());
+		$tenement = new Tenement($size, $iterations, $races, $this->getBodies());
 
-		return $state;
+		return $tenement;
 	}
 
 	/**
 	 * @return \SimpleXMLElement|\SimpleXMLElement[]
 	 * @throws XmlElementMissingException
 	 */
-	private function getOrganisms() {
-		$newOrganisms = [];
+	private function getBodies() {
+		$bodies = [];
 		foreach ($this->getElementByPath('organisms.organism') as $organism) {
 			$species = (string)$this->getXmlPath($organism, 'species');
-			$x = (int)$this->getXmlPath($organism, 'x_pos');
-			$y = (int)$this->getXmlPath($organism, 'y_pos');
-			$newOrganism = new Organism($x, $y, $species);
+			$storey = (int)$this->getXmlPath($organism, 'x_pos');
+			$door = (int)$this->getXmlPath($organism, 'y_pos');
 
-			$newOrganisms[$x][$y] = $newOrganism;
+			$bodies[$storey][$door] = new Body($storey, $door, $species);
 		}
 
-		return $newOrganisms;
+		return $bodies;
 	}
 
 	/**
