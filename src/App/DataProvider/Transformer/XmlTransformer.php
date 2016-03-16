@@ -47,7 +47,21 @@ class XmlTransformer {
 			$storey = (int)$this->getXmlPath($organism, 'x_pos');
 			$door = (int)$this->getXmlPath($organism, 'y_pos');
 
-			$bodies[$storey][$door] = new Body($storey, $door, $species);
+			$body = new Body($storey, $door, $species);
+
+			/**
+			 * if there is already feller in the storey/door, pick randomly between
+			 * current resident and new settler
+			 */
+			if (isset($bodies[$storey][$door])) {
+				$tmpBodies = [$bodies[$storey][$door], $body];
+				shuffle($tmpBodies);
+				$bodies[$storey][$door] = reset($tmpBodies);
+
+			// nobody lives here => make it occupied
+			} else {
+				$bodies[$storey][$door] = $body;
+			}
 		}
 
 		return $bodies;

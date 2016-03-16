@@ -28,12 +28,12 @@ class Game {
 	private $boundariesHelper;
 
 	/**
-	 * @param Tenement $world
+	 * @param Tenement $tenement
 	 * @param Court $court
 	 * @param BoundariesHelper $boundariesHelper
 	 */
-	public function __construct(Tenement $world, Court $court, BoundariesHelper $boundariesHelper) {
-		$this->tenement = $world;
+	public function __construct(Tenement $tenement, Court $court, BoundariesHelper $boundariesHelper) {
+		$this->tenement = $tenement;
 		$this->court = $court;
 		$this->boundariesHelper = $boundariesHelper;
 	}
@@ -50,7 +50,7 @@ class Game {
 			$bodies = $this->evolve($bodies);
 		}
 
-		$newWorld = clone $this->tenement;
+		$newWorld = new Tenement($this->tenement->size, $this->tenement->iterations, $this->tenement->races);
 		$newWorld->setBodies($bodies);
 		return $newWorld;
 	}

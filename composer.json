@@ -2,6 +2,7 @@
     "name": "mposchl/_gl",
     "description": "game of life - brand embassy",
     "require": {
+        "php": ">=5.5",
         "symfony/console": "^3.0",
         "phpunit/phpunit": "^4.8"
     },
