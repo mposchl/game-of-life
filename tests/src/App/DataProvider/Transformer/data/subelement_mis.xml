@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<life>
+    <world>
+        <iterations>2</iterations>
+    </world>
+    <organisms>
+        <organism>
+            <x_pos>0</x_pos>
+            <y_pos>0</y_pos>
+            <species>x</species>
+        </organism>
+    </organisms>
+</life>
